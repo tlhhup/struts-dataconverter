@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="one" namespace="/" extends="struts-default">
+		<!-- 拦截器 -->
+		<interceptors>
+			<!-- 配置的拦截器 -->
+			<interceptor name="RightInterceptor"
+				class="com.conver.interceptor.RightInterceptor" />
+			<!-- 管理拦截器 -->
+			<interceptor-stack name="myStack">
+				<!-- struts的拦截器保留 -->
+				<interceptor-ref name="defaultStack" />
+				<!-- 注入拦截器到拦截器栈中 -->
+				<interceptor-ref name="RightInterceptor" />
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 指定使用的拦截器:针对于所有的action都有效 -->
+		<default-interceptor-ref name="myStack" />
+
+		<!-- 全局视图 -->
+		<global-results>
+			<result name="noRight">/norights.jsp</result>
+		</global-results>
+
+		<!-- UserAction -->
+		<action name="UserAction_*" class="com.conver.action.UserAction"
+			method="{1}">
+			<result name="main">/main.jsp</result>
+		</action>
+
+	</package>
+
+</struts>
